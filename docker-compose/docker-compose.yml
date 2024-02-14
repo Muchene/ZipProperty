@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ../ZipServer
+    ports: 
+    - "8080:80"
+    volumes:
+      - ../ZipServer/test_cfg.json:/opt/zipproperty/config.json
+  

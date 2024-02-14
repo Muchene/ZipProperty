@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: Resident API
+  version: 1.0.0
+servers:
+  - url: http://example.com/api/v1
+paths:
+  /residents:
+    get:
+      summary: Get a list of residents
+      description: Returns a list of residents
+      responses:
+        '200':
+          description: A list of residents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Resident'
+    post:
+      summary: Create a new resident
+      description: Creates a new resident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resident'
+      responses:
+        '201':
+          description: The created resident
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resident'
+    put:
+      summary: Update an existing resident
+      description: Updates an existing resident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resident'
+      responses:
+        '200':
+          description: The updated resident
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resident'
+  /residents/{residentId}:
+    get:
+      summary: Get a resident
+      description: Returns a resident
+      parameters:
+        - in: path
+          name: residentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The requested resident
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resident'
+    patch:
+      summary: Update a resident
+      description: Updates a resident
+      parameters:
+        - in: path
+          name: residentId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Resident'
+      responses:
+        '200':
+          description: The updated resident
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resident'
+    delete:
+      summary: Delete a resident
+      description: Deletes a resident
+      parameters:
+        - in: path
+          name: residentId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: The resident was deleted
+components:
+  schemas:
+    Resident:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        dob:
+          type: string
+        idType:
+          type: string
