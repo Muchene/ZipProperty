@@ -1,0 +1,28 @@
+# Development Dockerfile for Flutter
+FROM ghcr.io/cirruslabs/flutter:stable
+
+# Set the working directory
+WORKDIR /app
+
+# Enable web support and ensure proper configuration
+RUN flutter config --enable-web
+RUN flutter doctor
+
+# Copy pubspec files first for better caching
+COPY pubspec.yaml pubspec.lock ./
+
+# Get dependencies
+RUN flutter pub get
+
+# Copy the source code
+COPY . .
+
+# Clean and get dependencies again to ensure everything is properly set up
+RUN flutter clean
+RUN flutter pub get
+
+# Expose the port for development server
+EXPOSE 3000
+
+# Run the development server
+CMD ["flutter", "run", "-d", "web-server", "--web-port=3000", "--web-hostname=0.0.0.0", "--verbose"]

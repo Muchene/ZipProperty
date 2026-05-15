@@ -1,0 +1,88 @@
+name: zipproperty_frontend
+description: A property management system frontend built with Flutter
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+platforms:
+    android:
+    ios:
+    linux:
+    macos:
+    web:
+    windows:
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.10.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # HTTP client
+  dio: ^5.3.2
+  
+  # State management
+  provider: ^6.0.5
+  
+  # Routing
+  go_router: ^17.0.1
+  
+  # Local storage
+  shared_preferences: ^2.5.4
+  
+  # JSON serialization
+  json_annotation: ^4.8.1
+  
+  # Form validation
+  flutter_form_builder: ^10.2.0 
+  form_builder_validators: ^11.2.0 
+  
+  # UI components
+  material_design_icons_flutter: ^7.0.7296
+  flutter_launcher_icons: ^0.13.1
+  
+  # Date handling
+  intl: ^0.20.2
+  
+  # Loading indicators
+  flutter_spinkit: ^5.2.0
+  
+  # Toast messages
+  fluttertoast: ^8.2.2
+  
+  # Image handling
+  # image_picker: ^1.2.1
+  
+  # Charts for analytics
+  fl_chart: ^0.64.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  # Code generation
+  build_runner: ^2.4.7
+  json_serializable: ^6.7.1
+  
+  # Linting
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+  
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700

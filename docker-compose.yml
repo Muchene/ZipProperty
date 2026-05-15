@@ -1,0 +1,59 @@
+# Docker Compose for ZipProperty Development
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: zipproperty_db
+    environment:
+      POSTGRES_DB: zipproperty
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - zipproperty_network
+
+  # Rust Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: zipproperty_backend
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/zipproperty
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      RUST_LOG: debug
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - zipproperty_network
+    volumes:
+      - ./backend:/app
+    command: cargo run
+
+  # Flutter Web Frontend (production)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: zipproperty_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - zipproperty_network
+
+volumes:
+  postgres_data:
+
+networks:
+  zipproperty_network:
+    driver: bridge

@@ -1,0 +1,42 @@
+# Dependencies
+/backend/target/
+/frontend/build/
+/frontend/.dart_tool/
+/frontend/.packages
+/frontend/pubspec.lock
+
+# Environment files
+/backend/.env
+.env
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+
+# Build artifacts
+dist/
+build/
+
+# Temporary files
+tmp/
+temp/
