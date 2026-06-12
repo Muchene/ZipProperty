@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/user.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/billing_summary_card.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -73,14 +74,18 @@ class DashboardScreen extends StatelessWidget {
                 Text(
                   'Role: ${user.role.name.toUpperCase()}',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppTheme.textSecondary,
-                      ),
+                    color: AppTheme.textSecondary,
+                  ),
                 ),
                 const SizedBox(height: 32),
 
                 // Quick stats cards
                 _buildStatsSection(context, user.role),
                 const SizedBox(height: 32),
+
+                // Billing summary (owners only)
+                const BillingSummaryCard(),
+                if (user.role == UserRole.owner) const SizedBox(height: 32),
 
                 // Quick actions
                 _buildQuickActionsSection(context, user.role),
@@ -100,36 +105,64 @@ class DashboardScreen extends StatelessWidget {
     List<_StatCard> stats = [];
 
     switch (role) {
+      case UserRole.member:
+        stats = [
+          _StatCard(
+            title: 'Create a property to become an owner',
+            value: '',
+            icon: Icons.add_business,
+          ),
+        ];
+        break;
       case UserRole.owner:
         stats = [
           _StatCard(
-              title: 'Total Properties', value: '0', icon: Icons.business),
+            title: 'Total Properties',
+            value: '0',
+            icon: Icons.business,
+          ),
           _StatCard(title: 'Active Tenants', value: '0', icon: Icons.people),
           _StatCard(
-              title: 'Monthly Revenue', value: '\$0', icon: Icons.attach_money),
+            title: 'Monthly Revenue',
+            value: '\$0',
+            icon: Icons.attach_money,
+          ),
           _StatCard(
-              title: 'Pending Maintenance', value: '0', icon: Icons.build),
+            title: 'Pending Maintenance',
+            value: '0',
+            icon: Icons.build,
+          ),
         ];
         break;
       case UserRole.agent:
         stats = [
           _StatCard(
-              title: 'Managed Properties', value: '0', icon: Icons.business),
+            title: 'Managed Properties',
+            value: '0',
+            icon: Icons.business,
+          ),
           _StatCard(title: 'Active Tenants', value: '0', icon: Icons.people),
           _StatCard(title: 'Pending Tasks', value: '0', icon: Icons.task),
           _StatCard(
-              title: 'This Month Collection',
-              value: '\$0',
-              icon: Icons.attach_money),
+            title: 'This Month Collection',
+            value: '\$0',
+            icon: Icons.attach_money,
+          ),
         ];
         break;
       case UserRole.tenant:
         stats = [
           _StatCard(title: 'Current Rent', value: '\$0', icon: Icons.home),
           _StatCard(
-              title: 'Next Payment', value: 'N/A', icon: Icons.calendar_today),
+            title: 'Next Payment',
+            value: 'N/A',
+            icon: Icons.calendar_today,
+          ),
           _StatCard(
-              title: 'Maintenance Requests', value: '0', icon: Icons.build),
+            title: 'Maintenance Requests',
+            value: '0',
+            icon: Icons.build,
+          ),
           _StatCard(title: 'Payment History', value: '0', icon: Icons.history),
         ];
         break;
@@ -138,10 +171,7 @@ class DashboardScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Overview',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
+        Text('Overview', style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: 16),
         GridView.builder(
           shrinkWrap: true,
@@ -174,8 +204,8 @@ class DashboardScreen extends StatelessWidget {
                     Text(
                       stat.title,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppTheme.textSecondary,
-                          ),
+                        color: AppTheme.textSecondary,
+                      ),
                     ),
                   ],
                 ),
@@ -191,6 +221,15 @@ class DashboardScreen extends StatelessWidget {
     List<_QuickAction> actions = [];
 
     switch (role) {
+      case UserRole.member:
+        actions = [
+          _QuickAction(
+            title: 'Create a Property',
+            icon: Icons.add_business,
+            onTap: () => context.go('/properties'),
+          ),
+        ];
+        break;
       case UserRole.owner:
         actions = [
           _QuickAction(
@@ -346,15 +385,15 @@ class DashboardScreen extends StatelessWidget {
                 Text(
                   'No recent activity',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppTheme.textSecondary,
-                      ),
+                    color: AppTheme.textSecondary,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Activity will appear here as you use the system',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.textTertiary,
-                      ),
+                    color: AppTheme.textTertiary,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -371,11 +410,7 @@ class _StatCard {
   final String value;
   final IconData icon;
 
-  _StatCard({
-    required this.title,
-    required this.value,
-    required this.icon,
-  });
+  _StatCard({required this.title, required this.value, required this.icon});
 }
 
 class _QuickAction {
@@ -383,9 +418,5 @@ class _QuickAction {
   final IconData icon;
   final VoidCallback onTap;
 
-  _QuickAction({
-    required this.title,
-    required this.icon,
-    required this.onTap,
-  });
+  _QuickAction({required this.title, required this.icon, required this.onTap});
 }

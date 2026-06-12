@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+import '../screens/auth/accept_invite_screen.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/register_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
@@ -17,8 +18,10 @@ class AppRouter {
         final isLoginRoute =
             state.matchedLocation == '/login' ||
             state.matchedLocation == '/register';
+        final isPublicRoute =
+            isLoginRoute || state.matchedLocation.startsWith('/invite/accept');
 
-        if (!isAuthenticated && !isLoginRoute) {
+        if (!isAuthenticated && !isPublicRoute) {
           return '/login';
         }
 
@@ -36,6 +39,11 @@ class AppRouter {
         GoRoute(
           path: '/register',
           builder: (context, state) => const RegisterScreen(),
+        ),
+        GoRoute(
+          path: '/invite/accept/:token',
+          builder: (context, state) =>
+              AcceptInviteScreen(token: state.pathParameters['token'] ?? ''),
         ),
         GoRoute(
           path: '/dashboard',

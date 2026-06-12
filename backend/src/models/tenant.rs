@@ -56,6 +56,28 @@ pub struct UpdateTenantRequest {
 }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct AssignTenantRequest {
+    pub email: String,
+    pub name: Option<String>,
+    pub property_id: Uuid,
+    pub unit_number: Option<String>,
+    pub lease_start_date: DateTime<Utc>,
+    pub lease_end_date: DateTime<Utc>,
+    pub monthly_rent: f64,
+    pub security_deposit: f64,
+    pub emergency_contact_name: Option<String>,
+    pub emergency_contact_phone: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct AssignTenantResponse {
+    pub tenant_id: Uuid,
+    pub user_id: Uuid,
+    pub property_id: Uuid,
+    pub invite_sent: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, ToSchema, sqlx::FromRow)]
 pub struct TenantResponse {
     pub id: Uuid,
     pub user_id: Uuid,

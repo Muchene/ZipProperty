@@ -1,11 +1,8 @@
 use axum::{
     extract::Extension,
-    http::StatusCode,
-    response::Json,
     routing::{get, post},
     Router,
 };
-use sqlx::PgPool;
 use std::net::SocketAddr;
 use tower::ServiceBuilder;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
@@ -23,7 +20,6 @@ mod repositories;
 mod services;
 
 use config::Config;
-use error::AppError;
 
 #[derive(OpenApi)]
 #[openapi(
@@ -31,15 +27,22 @@ use error::AppError;
         handlers::health::health_check,
         handlers::auth::login,
         handlers::auth::register,
+        handlers::auth::accept_invite,
     ),
     components(
-        schemas(models::auth::LoginRequest, models::auth::RegisterRequest, models::auth::AuthResponse)
+        schemas(
+            models::auth::LoginRequest,
+            models::auth::RegisterRequest,
+            models::auth::AcceptInviteRequest,
+            models::auth::AuthResponse
+        )
     ),
     tags(
         (name = "health", description = "Health check endpoints"),
         (name = "auth", description = "Authentication endpoints"),
         (name = "properties", description = "Property management endpoints"),
         (name = "tenants", description = "Tenant management endpoints"),
+        (name = "billing", description = "Owner billing endpoints"),
         (name = "payments", description = "Payment management endpoints"),
         (name = "maintenance", description = "Maintenance request endpoints"),
     )
@@ -69,8 +72,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/api/health", get(handlers::health::health_check))
         .route("/api/auth/login", post(handlers::auth::login))
         .route("/api/auth/register", post(handlers::auth::register))
+        .route("/api/auth/invites/accept", post(handlers::auth::accept_invite))
         .nest("/api/properties", handlers::properties::routes())
         .nest("/api/tenants", handlers::tenants::routes())
+        .nest("/api/billing", handlers::billing::routes())
         .nest("/api/payments", handlers::payments::routes())
         .nest("/api/maintenance", handlers::maintenance::routes())
         .merge(SwaggerUi::new("/api/docs").url("/api-docs/openapi.json", ApiDoc::openapi()))

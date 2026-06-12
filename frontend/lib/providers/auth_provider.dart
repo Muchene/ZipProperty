@@ -61,14 +61,12 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> register(
-      String name, String email, String password, UserRole role) async {
+  Future<bool> register(String name, String email, String password) async {
     _setLoading(true);
     _clearError();
 
     try {
-      final authResponse =
-          await _authService.register(name, email, password, role);
+      final authResponse = await _authService.register(name, email, password);
 
       _user = authResponse.user;
       _token = authResponse.token;
@@ -85,6 +83,17 @@ class AuthProvider extends ChangeNotifier {
       _setLoading(false);
       return false;
     }
+  }
+
+  /// Called after invite acceptance — stores the returned auth token and user
+  /// without going through the normal register/login flow.
+  Future<void> setAuthFromInvite(String token, User user) async {
+    _user = user;
+    _token = token;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(AppConfig.authTokenKey, token);
+    await prefs.setString(AppConfig.userDataKey, user.toJson());
+    notifyListeners();
   }
 
   Future<void> logout() async {

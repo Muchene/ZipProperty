@@ -35,10 +35,7 @@ class AuthService {
     try {
       final response = await _dio.post(
         '/auth/login',
-        data: {
-          'email': email,
-          'password': password,
-        },
+        data: {'email': email, 'password': password},
       );
 
       if (response.statusCode == 200) {
@@ -63,17 +60,11 @@ class AuthService {
     String name,
     String email,
     String password,
-    UserRole role,
   ) async {
     try {
       final response = await _dio.post(
         '/auth/register',
-        data: {
-          'name': name,
-          'email': email,
-          'password': password,
-          'role': role.name,
-        },
+        data: {'name': name, 'email': email, 'password': password},
       );
 
       if (response.statusCode == 201) {

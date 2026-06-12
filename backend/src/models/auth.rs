@@ -18,7 +18,14 @@ pub struct RegisterRequest {
     pub email: String,
     #[validate(length(min = 6))]
     pub password: String,
-    pub role: UserRole,
+}
+
+#[derive(Debug, Serialize, Deserialize, ToSchema, Validate)]
+pub struct AcceptInviteRequest {
+    pub token: String,
+    #[validate(length(min = 6))]
+    pub password: String,
+    pub name: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
@@ -39,6 +46,7 @@ pub struct UserInfo {
 #[sqlx(type_name = "user_role", rename_all = "lowercase")]
 #[serde(rename_all = "lowercase")]
 pub enum UserRole {
+    Member,
     Owner,
     Agent,
     Tenant,

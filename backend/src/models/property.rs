@@ -59,6 +59,19 @@ pub struct UpdatePropertyRequest {
 }
 
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct AssignAgentRequest {
+    pub email: String,
+    pub name: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct AssignAgentResponse {
+    pub property_id: Uuid,
+    pub user_id: Uuid,
+    pub invite_sent: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct PropertyResponse {
     pub id: Uuid,
     pub owner_id: Uuid,

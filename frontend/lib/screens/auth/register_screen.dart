@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
-import '../../models/user.dart';
 import '../../theme/app_theme.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -20,7 +19,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  UserRole _selectedRole = UserRole.tenant;
 
   @override
   void dispose() {
@@ -39,7 +37,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _nameController.text.trim(),
         _emailController.text.trim(),
         _passwordController.text,
-        _selectedRole,
       );
 
       if (success && mounted) {
@@ -130,27 +127,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return 'Please enter a valid email';
                             }
                             return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Role selection
-                        DropdownButtonFormField<UserRole>(
-                          initialValue: _selectedRole,
-                          decoration: const InputDecoration(
-                            labelText: 'Role',
-                            prefixIcon: Icon(Icons.badge),
-                          ),
-                          items: UserRole.values.map((role) {
-                            return DropdownMenuItem(
-                              value: role,
-                              child: Text(role.name.toUpperCase()),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedRole = value!;
-                            });
                           },
                         ),
                         const SizedBox(height: 16),

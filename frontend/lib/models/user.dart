@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-enum UserRole { owner, agent, tenant }
+enum UserRole { member, owner, agent, tenant }
 
 class User {
   final String id;
@@ -22,7 +22,7 @@ class User {
       email: map['email'] ?? '',
       role: UserRole.values.firstWhere(
         (e) => e.name == map['role'],
-        orElse: () => UserRole.tenant,
+        orElse: () => UserRole.member,
       ),
     );
   }
@@ -30,12 +30,7 @@ class User {
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'role': role.name,
-    };
+    return {'id': id, 'name': name, 'email': email, 'role': role.name};
   }
 
   String toJson() => json.encode(toMap());
@@ -65,10 +60,7 @@ class AuthResponse {
   final String token;
   final User user;
 
-  AuthResponse({
-    required this.token,
-    required this.user,
-  });
+  AuthResponse({required this.token, required this.user});
 
   factory AuthResponse.fromMap(Map<String, dynamic> map) {
     return AuthResponse(
